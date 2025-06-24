@@ -3,30 +3,25 @@ using namespace std;
 
 #define MAX 100
 
-// Estrutura para fila
 struct Fila {
     int dados[MAX];
     int frente;
     int tras;
 };
 
-// Inicializa fila
 void inicializarFila(Fila* f) {
     f->frente = 0;
     f->tras = -1;
 }
 
-// Verifica se fila está vazia
 bool filaVazia(Fila* f) {
     return f->frente > f->tras;
 }
 
-// Verifica se fila está cheia
 bool filaCheia(Fila* f) {
     return f->tras == MAX - 1;
 }
 
-// Enfileirar
 bool enfileirar(Fila* f, int valor) {
     if (filaCheia(f)) return false;
     f->tras++;
@@ -34,7 +29,6 @@ bool enfileirar(Fila* f, int valor) {
     return true;
 }
 
-// Desenfileirar
 bool desenfileirar(Fila* f, int* valor) {
     if (filaVazia(f)) return false;
     *valor = f->dados[f->frente];
@@ -42,20 +36,17 @@ bool desenfileirar(Fila* f, int* valor) {
     return true;
 }
 
-// Tamanho da fila
 int tamanhoFila(Fila* f) {
     return f->tras - f->frente + 1;
 }
 
 // -------------------------
-// Lista de guichês
 struct Guiche {
     int id;
     Fila senhasAtendidas;
     Guiche* prox;
 };
 
-// Adiciona novo guichê à lista
 void adicionarGuiche(Guiche** lista, int id) {
     Guiche* novo = new Guiche;
     novo->id = id;
@@ -64,7 +55,6 @@ void adicionarGuiche(Guiche** lista, int id) {
     *lista = novo;
 }
 
-// Busca guichê por id
 Guiche* buscarGuiche(Guiche* lista, int id) {
     while (lista != NULL) {
         if (lista->id == id)
@@ -74,7 +64,6 @@ Guiche* buscarGuiche(Guiche* lista, int id) {
     return NULL;
 }
 
-// Conta guichês abertos
 int contarGuiches(Guiche* lista) {
     int cont = 0;
     while (lista != NULL) {
@@ -84,20 +73,18 @@ int contarGuiches(Guiche* lista) {
     return cont;
 }
 
-// Lista senhas atendidas por um guichê
 void listarSenhasGuiche(Guiche* guiche) {
     if (guiche == NULL || filaVazia(&guiche->senhasAtendidas)) {
-        cout << "Nenhuma senha atendida por este guichê.\n";
+        cout << "Nenhuma senha atendida por este guichÃª.\n";
         return;
     }
-    cout << "Senhas atendidas pelo guichê " << guiche->id << ": ";
+    cout << "Senhas atendidas pelo guichÃª " << guiche->id << ": ";
     for (int i = guiche->senhasAtendidas.frente; i <= guiche->senhasAtendidas.tras; i++) {
         cout << guiche->senhasAtendidas.dados[i] << " ";
     }
     cout << endl;
 }
 
-// -------------------------
 int main() {
     Fila* senhasGeradas = new Fila;
     inicializarFila(senhasGeradas);
@@ -113,10 +100,10 @@ int main() {
         cout << "\n------ SISTEMA DE ATENDIMENTO 2.0 ------\n";
         cout << "0 - Sair\n";
         cout << "1 - Gerar senha\n";
-        cout << "2 - Abrir guichê\n";
+        cout << "2 - Abrir guichÃª\n";
         cout << "3 - Realizar atendimento\n";
-        cout << "4 - Listar senhas atendidas por guichê\n";
-        cout << "Senhas aguardando: " << tamanhoFila(senhasGeradas) << " | Guichês abertos: " << contarGuiches(listaGuiches) << "\n";
+        cout << "4 - Listar senhas atendidas por guichÃª\n";
+        cout << "Senhas aguardando: " << tamanhoFila(senhasGeradas) << " | GuichÃªs abertos: " << contarGuiches(listaGuiches) << "\n";
         cout << "Escolha uma opcao: ";
         cin >> opcao;
 
@@ -126,17 +113,17 @@ int main() {
                 if (enfileirar(senhasGeradas, senhaAtual))
                     cout << "Senha " << senhaAtual << " gerada com sucesso.\n";
                 else
-                    cout << "Fila cheia. Não foi possível gerar mais senhas.\n";
+                    cout << "Fila cheia. NÃ£o foi possÃ­vel gerar mais senhas.\n";
                 break;
 
             case 2:
-                cout << "Digite o ID do novo guichê: ";
+                cout << "Digite o ID do novo guichÃª: ";
                 cin >> idGuiche;
                 if (buscarGuiche(listaGuiches, idGuiche)) {
-                    cout << "Guichê com esse ID já existe.\n";
+                    cout << "GuichÃª com esse ID jÃ¡ existe.\n";
                 } else {
                     adicionarGuiche(&listaGuiches, idGuiche);
-                    cout << "Guichê " << idGuiche << " aberto com sucesso.\n";
+                    cout << "GuichÃª " << idGuiche << " aberto com sucesso.\n";
                 }
                 break;
 
@@ -145,23 +132,23 @@ int main() {
                     cout << "Nenhuma senha aguardando atendimento.\n";
                     break;
                 }
-                cout << "Digite o ID do guichê: ";
+                cout << "Digite o ID do guichÃª: ";
                 cin >> idGuiche;
                 Guiche* g = buscarGuiche(listaGuiches, idGuiche);
                 if (g == NULL) {
-                    cout << "Guichê não encontrado.\n";
+                    cout << "GuichÃª nÃ£o encontrado.\n";
                     break;
                 }
                 if (desenfileirar(senhasGeradas, &senhaAtendida)) {
                     enfileirar(&g->senhasAtendidas, senhaAtendida);
                     totalAtendidas++;
-                    cout << "Guichê " << idGuiche << " atendeu a senha " << senhaAtendida << endl;
+                    cout << "GuichÃª " << idGuiche << " atendeu a senha " << senhaAtendida << endl;
                 }
                 break;
             }
 
             case 4: {
-                cout << "Digite o ID do guichê: ";
+                cout << "Digite o ID do guichÃª: ";
                 cin >> idGuiche;
                 Guiche* g = buscarGuiche(listaGuiches, idGuiche);
                 listarSenhasGuiche(g);
@@ -170,7 +157,7 @@ int main() {
 
             case 0:
                 if (!filaVazia(senhasGeradas)) {
-                    cout << "Ainda há senhas para atender. Não é possível sair agora.\n";
+                    cout << "Ainda hÃ¡ senhas para atender. NÃ£o Ã© possÃ­vel sair agora.\n";
                     opcao = -1;
                 } else {
                     cout << "\nEncerrando o sistema...\n";
@@ -184,7 +171,7 @@ int main() {
 
     } while (opcao != 0);
 
-    // Liberação de memória
+    // LiberaÃ§Ã£o de memÃ³ria
     delete senhasGeradas;
     while (listaGuiches != NULL) {
         Guiche* temp = listaGuiches;
